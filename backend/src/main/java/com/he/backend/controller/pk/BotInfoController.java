@@ -12,7 +12,6 @@ public class BotInfoController {
 
     @RequestMapping("getuserinfo/")
     public Map<String,String> getBotInfo(){
-        System.out.println("1");
         Map<String,String> map = new LinkedHashMap<>();
         map.put("name","黄恩");
         map.put("age","18");
