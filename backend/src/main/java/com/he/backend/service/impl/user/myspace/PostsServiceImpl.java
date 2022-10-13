@@ -55,9 +55,14 @@ public class PostsServiceImpl implements PostsService {
         UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
         User user = userDetails.getUser();
 
+        Map<String, String> map = new HashMap<>();
+        Posts posts = postsMapper.selectById(post_id);
+        if(posts == null || !posts.getUser_id().equals(user.getId())){
+            map.put("error_message","帖子不存在或已被删除");
+        }
+
         postsMapper.deleteById(post_id);
 
-        Map<String, String> map = new HashMap<>();
         map.put("error_message","success");
         return map;
     }

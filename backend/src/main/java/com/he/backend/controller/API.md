@@ -1,4 +1,5 @@
-1. 获取Json Web Token（JWT）
+
+1.获取Json Web Token（JWT）
    - 地址：http://127.0.0.1:3000/user/account/token/
    - 方法：POST
    - 是否验证jwt：否
@@ -8,7 +9,8 @@
    - 返回结果：
      - error_message: 状态信息
      - token: jwt
-1. 刷新JWT令牌
+
+1.刷新JWT令牌
    - 地址：http://localhost:3000/api/token/refresh/
    - 方法：POST
    - 是否验证jwt：否
@@ -16,46 +18,53 @@
      - refresh: 刷新令牌
    - 返回结果：
      - access: 访问令牌，有效期5分钟
-1. 获取用户列表
+
+1.获取用户列表
    - 地址：http://localhost:3000/user/account/userlist/
    - 方法：GET
    - 是否验证jwt：是
    - 输入参数：无
    - 返回结果：返回用户的信息
-1. 获取某个用户的信息
+
+1.获取某个用户的信息
    - 地址：http://127.0.0.1:3000/user/account/info/
    - 方法：GET
    - 是否验证jwt：是
    - 返回结果：该登录用户的信息
-1. 获取某个用户的信息
+
+1.获取某个用户的信息
    - 地址：http://localhost:3000/user/account/info/get/
    - 方法：GET
    - 是否验证jwt：是
    - 输入参数：
      - user_id：用户的ID
    - 返回结果：该用户的信息
-1. 获取某个用户的所有帖子
+
+1.获取某个用户的所有帖子
    - 地址：http://localhost:3000/user/myspace/posts/get/
    - 方法：GET
    - 是否验证jwt：是
    - 输入参数：
      - user_id：用户的ID
    - 返回结果：该用户的所有帖子
-1. 创建一个帖子
+
+1.创建一个帖子
    - 地址：http://localhost:3000/user/myspace/posts/create/
    - 方法：POST
    - 是否验证jwt：是
    - 输入参数：
      - content：帖子的内容
    - 返回结果：error_message: success
-1. 删除一个帖子
+
+1.删除一个帖子
    - 地址：http://localhost:3000/user/myspace/posts/del/
    - 方法：DELETE
    - 是否验证jwt：是
    - 输入参数：
      - post_id：被删除帖子的ID
    - 返回结果：error_message: success
-1. 更改关注状态
+
+1.更改关注状态
    如果未关注，则关注；如果已关注，则取消关注。
     - 地址：http://127.0.0.1:3000/user/myspace/friends/changefollow/
     - 方法：POST
@@ -63,7 +72,8 @@
     - 输入参数：
       - target_id: 被关注的用户ID
     - 返回结果：error_message: success
-1. 查看关注状态
+
+1.查看关注状态
     - 地址：http://127.0.0.1:3000/user/myspace/friends/isfollow/
     - 方法：GET
     - 是否验证jwt：是
@@ -72,7 +82,8 @@
     - 返回结果：
       - error_message: success
       - state: follow/unfollow
-1. 注册账号
+
+1.注册账号
    - 地址：http://127.0.0.1:3000/user/account/register/
    - 方法：POST
    - 是否验证jwt：否
@@ -85,3 +96,51 @@
      - error_message: 用户名为空
      - error_message: 两个密码不一致
      - error_message: 用户名已存在
+
+1. 创建bot
+    - 地址：http://127.0.0.1:3000/user/bot/add/
+    - 方法：POST
+    - 是否验证jwt：是
+    - 输入参数：
+        - title: 标题
+        - description：描述
+        - content：代码
+    - 返回结果：
+        - error_message: success
+        - error_message: 标题不能为空
+        - error_message: 标题长度不能大于30
+        - error_message: 用户名已存在
+        - error_message: success
+
+1. 删除bot
+    - 地址：http://127.0.0.1:3000/user/bot/del/
+    - 方法：DELETE
+    - 是否验证jwt：是
+    - 输入参数：
+        - bot_id: 机器人id
+    - 返回结果：
+        - error_message: success
+        - error_message: bot不存在或已被删除
+
+1. 修改bot
+    - 地址：http://127.0.0.1:3000/user/bot/update/
+    - 方法：POST
+    - 是否验证jwt：是
+    - 输入参数：
+        - bot_id: 机器人id 
+        - title: 标题
+        - description：描述
+        - content：代码
+    - 返回结果：
+        - error_message: success
+        - error_message: 用户名为空
+        - error_message: 两个密码不一致
+        - error_message: 用户名已存在
+
+1. 查询bot
+    - 地址：http://127.0.0.1:3000/user/bot/getlist/
+    - 方法：GET
+    - 是否验证jwt：是
+    - 返回结果：
+      - 该用户的所有bot
+      - error_message: success

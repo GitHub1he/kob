@@ -48,6 +48,11 @@ public class InfoServiceImpl implements InfoService {
         User user = userMapper.selectOne(queryWrapper);
 
         Map<String, String> map = new HashMap<>();
+        if(user == null) {
+            map.put("error_message" , "用户不存在或注销");
+            return map;
+        }
+
         map.put("error_message" , "success");
         map.put("id" , user.getId().toString());
         map.put("username", user.getUsername());
