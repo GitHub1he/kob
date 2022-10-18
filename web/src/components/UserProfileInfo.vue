@@ -2,15 +2,16 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-3 img-field">
+                <div class="col-4 img-field">
                     <img class="img-fluid" :src="user.photo" alt="">
                 </div>
-                <div class="col-9">
-                <div class="username"> {{ user.username }}</div>
-                <div class="fans">粉丝: {{ user.followerCount }}</div>
-                <div class="postcount">发帖数: {{ posts.count }}</div>
-                <button @click="follow" v-if="!user.is_followed" type="button" class="btn btn-secondary btn-sm">+关注</button>
-                <button @click="unfollow" v-if="user.is_followed" type="button" class="btn btn-secondary btn-sm">取消关注</button>
+                <div class="col-1"></div>
+                <div class="col-6">
+                  <div class="username"> {{ user.username }}</div>
+                  <div class="fans">粉丝: {{ user.followerCount }}</div>
+                  <div class="postcount">发帖数: {{ posts.count }}</div>
+                  <button @click="follow" v-if="!user.is_followed" type="button" class="btn btn-secondary btn-sm">+关注</button>
+                  <button @click="unfollow" v-if="user.is_followed" type="button" class="btn btn-secondary btn-sm">取消关注</button>
                 </div>
             </div>
         </div>
@@ -83,18 +84,20 @@ img {
     border-radius: 30%;
 }
 .username {
-    font-weight: bold;
+  font-size: large;
+  font-weight: bold;
 }
 .fans {
-    font-size: 12px;
+    font-size: 14px;
     color:rgb(31, 239, 34);
 }
 button {
+  margin-top: 12px;
     padding: 2px 4px;
     font-size: 12px;
 }
 .postcount {
-    font-size: 12px;
+    font-size: 14px;
     color:rgb(39, 213, 210);
 }
 

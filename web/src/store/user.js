@@ -9,6 +9,8 @@ export default {
     followercount: "",
     token: "",
     is_login: false,
+    flag: 0,
+    is_me: false,
   },
   getters: {
   },
@@ -31,6 +33,12 @@ export default {
       state.token = "";
       state.is_login = false;
     },
+    updateFlag(state, flag) {
+      state.flag = flag;
+    },
+    updateIsme(state, is_me) {
+      state.is_me = is_me;
+    }
   },
   actions: {
     login(context, data) {

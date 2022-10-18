@@ -51,5 +51,6 @@ export default {
 }
 button {
     margin-top: 10px;
+    float: right;
 }
 </style>

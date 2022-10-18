@@ -103,6 +103,7 @@ router.beforeEach((to, from, next) =>{
       success() {
       },
       error() {
+        store.dispatch("logout");
         alert("token无效,请重新登录！");
         router.push({ name: 'login' });
       }

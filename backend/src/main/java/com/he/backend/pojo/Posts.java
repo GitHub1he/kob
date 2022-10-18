@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class Posts {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    private Integer user_id;
+    private Integer userId;
     private String post;
 }

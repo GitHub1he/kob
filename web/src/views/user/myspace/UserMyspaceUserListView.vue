@@ -1,48 +1,46 @@
 <template>
-  <ContentField>
-    <div class="card"  v-for="user in users" :key="user.id" @click="open_user_profile(user.id)">
+    <div class="card"  v-for="user in users.value" :key="user.id" @click="open_user_profile(user.id)">
       <div class="card-body">
         <div class="row">
           <div class="col-1 img-field">
             <img class="img-fluid" :src="user.photo" alt="用户头像">
           </div>
-          <div class="col-11">
+          <div class="col-10">
             <div class="username">{{ user.username }}</div>
             <div class="follower-count">粉丝数: {{ user.followercount}}</div>
           </div>
         </div>
       </div>
     </div>
-  </ContentField>
 </template>
   
 <script>
-import ContentField from '@/components/ContentField';
-import $ from 'jquery';
-import { ref } from 'vue';
 import router from '@/router';
 import { useStore } from 'vuex';
-
 
 export default {
   name: 'UserListView',
   components: {
-    ContentField
+  },
+  props: {
+    users: {
+      type: Object,
+      required: true,
+    }
   },
   setup() {
     const store = useStore();
-    let users = ref([]);
 
-    $.ajax({
-      url: 'http://127.0.0.1:3000/user/account/userlist/',
-      type: "get",
-      headers:{
-        'Authorization': "Bearer " + store.state.user.token,
-      },
-      success(resp) {
-        users.value = resp;
-      }
-    });
+    // $.ajax({
+    //   url: 'http://127.0.0.1:3000/user/account/userlist/',
+    //   type: "get",
+    //   headers:{
+    //     'Authorization': "Bearer " + store.state.user.token,
+    //   },
+    //   success(resp) {
+    //     users.value = resp;
+    //   }
+    // });
 
     const open_user_profile= userId => {
       if(store.state.user.is_login){
@@ -60,7 +58,6 @@ export default {
       
     }
     return {
-      users,
       open_user_profile,
     };
   }

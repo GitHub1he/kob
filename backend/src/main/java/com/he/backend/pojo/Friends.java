@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class Friends {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    private Integer target_id;
-    private Integer follower_id;
+    private Integer targetId;
+    private Integer followerId;
 }

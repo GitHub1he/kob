@@ -83,6 +83,33 @@
       - error_message: success
       - state: follow/unfollow
 
+1. 查看粉丝列表
+    - 地址：http://127.0.0.1:3000/user/myspace/friends/follower/
+    - 方法：GET
+    - 是否验证jwt：是
+    - 输入参数：
+        - target_id: 被关注的用户ID
+    - 返回结果：
+        - error_message: success
+
+1. 查看关注列表
+    - 地址：http://127.0.0.1:3000/user/myspace/friends/focuser/
+    - 方法：GET
+    - 是否验证jwt：是
+    - 输入参数：
+        - follower_id: 关注的用户ID
+    - 返回结果：
+        - error_message: success
+
+1. 查看未关注列表
+    - 地址：http://127.0.0.1:3000/user/myspace/friends/unfocus/
+    - 方法：GET
+    - 是否验证jwt：是
+    - 输入参数：
+        - follower_id: 关注的用户ID
+    - 返回结果：
+        - error_message: success
+
 1.注册账号
    - 地址：http://127.0.0.1:3000/user/account/register/
    - 方法：POST

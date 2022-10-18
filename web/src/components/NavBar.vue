@@ -24,7 +24,7 @@
         </div>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li><router-link class="dropdown-item" :to="{name: 'userbot_index'}">My Bot</router-link></li>
-          <li><router-link class="dropdown-item" :to="{name: 'userlist'}">My Space</router-link></li>
+          <li><router-link class="dropdown-item" :to="{name: 'userprofile' ,params: {userId: $store.state.user.id}}">My Space</router-link></li>
           <li><hr class="dropdown-divider"></li>
           <li><router-link class="dropdown-item" :to="{name: 'login'}" @click="logout">退出</router-link></li>
         </ul>

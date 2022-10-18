@@ -57,7 +57,7 @@ public class PostsServiceImpl implements PostsService {
 
         Map<String, String> map = new HashMap<>();
         Posts posts = postsMapper.selectById(post_id);
-        if(posts == null || !posts.getUser_id().equals(user.getId())){
+        if(posts == null || !posts.getUserId().equals(user.getId())){
             map.put("error_message","帖子不存在或已被删除");
         }
 

@@ -12,7 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -73,4 +75,41 @@ public class FriendsServiceImpl implements FriendsService {
         map.put("error_message","success");
         return map;
     }
+
+    @Override
+    public List<User> myFollower(int target_id) {
+        List<User> list = new ArrayList<>();
+        QueryWrapper<Friends> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("target_id", target_id);
+        List<Friends> friends = friendsMapper.selectList(queryWrapper);
+        for (Friends friend : friends) {
+            Integer userid = friend.getFollowerId();
+            list.add(userMapper.selectById(userid));
+        }
+        return list;
+    }
+
+    @Override
+    public List<User> myFocuser(int follower_id) {
+        List<User> list = new ArrayList<>();
+        QueryWrapper<Friends> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("follower_id", follower_id);
+        List<Friends> friends = friendsMapper.selectList(queryWrapper);
+        for (Friends friend : friends) {
+            Integer userid = friend.getTargetId();
+
+            list.add(userMapper.selectById(userid));
+        }
+        return list;
+    }
+
+    @Override
+    public List<User> myUnFocuser(int follower_id) {
+        String sql = "select target_id from friends where follower_id = " +follower_id;
+
+        return userMapper.selectList(new QueryWrapper<User>()
+                .notInSql("id",sql));
+    }
+
+
 }
