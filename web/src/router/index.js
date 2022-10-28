@@ -5,7 +5,6 @@ import RankListIndexView from '@/views/ranklist/RankListIndexView'
 import UserBotIndexView from '@/views/user/bot/UserBotIndexView'
 import UserAccountLoginView from '@/views/user/account/UserAccountLoginView'
 import UserAccountRegisterView from '@/views/user/account/UserAccountRegisterView'
-import UserMyspaceUserListView from '@/views/user/myspace/UserMyspaceUserListView'
 import UserMyspaceUserProfileView from '@/views/user/myspace/UserMyspaceUserProfileView'
 import NotFound from '@/views/error/NotFound'
 import store from '@/store/index'
@@ -14,7 +13,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    redirect: "/user/myspace/userlist/",
+    redirect: "/userbot/",
     meta: {
       requestAuth: true,
     }
@@ -47,14 +46,6 @@ const routes = [
     path: "/userbot/",
     name: "userbot_index",
     component: UserBotIndexView,
-    meta: {
-      requestAuth: true,
-    }
-  },
-  {
-    path: '/user/myspace/userlist/',
-    name: 'userlist',
-    component: UserMyspaceUserListView,
     meta: {
       requestAuth: true,
     }
