@@ -86,6 +86,10 @@ public class FriendsServiceImpl implements FriendsService {
             Integer userid = friend.getFollowerId();
             list.add(userMapper.selectById(userid));
         }
+
+        for (User user : list) {
+            user.setPassword("");
+        }
         return list;
     }
 
@@ -100,6 +104,9 @@ public class FriendsServiceImpl implements FriendsService {
 
             list.add(userMapper.selectById(userid));
         }
+        for (User user : list) {
+            user.setPassword("");
+        }
         return list;
     }
 
@@ -107,8 +114,12 @@ public class FriendsServiceImpl implements FriendsService {
     public List<User> myUnFocuser(int follower_id) {
         String sql = "select target_id from friends where follower_id = " +follower_id;
 
-        return userMapper.selectList(new QueryWrapper<User>()
-                .notInSql("id",sql));
+        List<User> users = userMapper.selectList(new QueryWrapper<User>()
+                .notInSql("id", sql));
+        for (User user : users) {
+            user.setPassword("");
+        }
+        return users;
     }
 
 

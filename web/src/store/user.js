@@ -9,7 +9,7 @@ export default {
     followercount: "",
     token: "",
     is_login: false,
-    flag: 0,
+    flag: 0, // 0->空间  2->发现 3->粉丝 4->关注
     is_me: false,
   },
   getters: {

@@ -38,6 +38,9 @@ public class InfoServiceImpl implements InfoService {
     @Override
     public List<User> userList() {
         List<User> users = userMapper.selectList(null);
+        for(User user: users){
+            user.setPassword("");
+        }
         return users;
     }
 

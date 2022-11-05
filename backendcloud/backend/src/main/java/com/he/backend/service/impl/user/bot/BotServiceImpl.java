@@ -31,7 +31,7 @@ public class BotServiceImpl implements BotService {
         User user = userDetails.getUser();
 
         String title = data.get("title");
-        String description = data.get("descriptioin");
+        String description = data.get("description");
         String content = data.get("content");
 
         Map<String, String> map = new HashMap<>();
@@ -57,6 +57,10 @@ public class BotServiceImpl implements BotService {
         }
         if(content.length()> 10000){
             map.put("error_message", "代码长度不能超过10000");
+            return map;
+        }
+        if(botMapper.selectCount(new QueryWrapper<Bot>().eq("user_id",user.getId())) >= 10){
+            map.put("error_message", "最多只能创建10个bot !!!");
             return map;
         }
 

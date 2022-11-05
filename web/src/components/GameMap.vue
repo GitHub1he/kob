@@ -1,11 +1,11 @@
 <template>
   <div class="flag-a flag" v-if="$store.state.pk.a_id === parseInt($store.state.user.id)">
     <img class="img-fluid img-sm" :src="$store.state.user.photo" alt="">
-    自己
+    &#45; &gt;
   </div>
   <div class="flag-b flag" v-if="$store.state.pk.b_id === parseInt($store.state.user.id)">
-    <img class="img-fluid img-sm" :src="$store.state.pk.opponent_photo" alt="">
-    自己
+    &lt; &#45;
+    <img class="img-fluid img-sm" :src="$store.state.user.photo" alt="">
   </div>
   <div ref="parent" class="gamemap">
     <canvas ref="canvas" tabindex="0"></canvas>
@@ -49,28 +49,32 @@ export default {
 }
 
 .flag {
-  width: 80px;
-  height: 75px;
+  width: 10vw;
+  height: 10vh;
   position: absolute;
-  left: 8vh;
+  
   background-color: rgba(50, 50, 50, 0.5);
 }
 
 img {
   border-radius: 50%;
-  height: 30px;
-  width: 30px;
+  height: 6vw;
+  width: 6vw;
 }
 
 .flag-a {
   background-color: #466f95;
+  float: left;
+  left: 10vw;
+  top: 80vh;
 }
 
 .flag-b {
   background-color: #deaeb1;
+  float: right;
+  right: 10vw;
+  top: 20vh;
 }
 
-.flag {
-  float: left;
-}
+
 </style>
