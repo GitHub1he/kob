@@ -20,7 +20,7 @@ public class RankListServiceImpl implements RankListService {
     public JSONObject getList(Integer page) {
         JSONObject res = new JSONObject();
 
-        IPage<User> userIPage = new Page<>(page, 5);
+        IPage<User> userIPage = new Page<>(page, 10);
 
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("rating");

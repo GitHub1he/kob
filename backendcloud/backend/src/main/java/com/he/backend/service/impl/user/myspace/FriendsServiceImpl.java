@@ -7,6 +7,7 @@ import com.he.backend.pojo.Friends;
 import com.he.backend.pojo.User;
 import com.he.backend.service.impl.utils.UserDetailsImpl;
 import com.he.backend.service.user.myspace.FriendsService;
+import com.he.backend.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,10 +27,7 @@ public class FriendsServiceImpl implements FriendsService {
 
     @Override
     public Map<String, String> changeFollow(int target_id) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         QueryWrapper<Friends> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("target_id",target_id).eq("follower_id",user.getId());
@@ -56,10 +54,7 @@ public class FriendsServiceImpl implements FriendsService {
 
     @Override
     public Map<String, String> isFollowed(int target_id) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         QueryWrapper<Friends> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("target_id",target_id)

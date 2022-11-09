@@ -7,6 +7,7 @@ import UserBotIndexView from '@/views/user/bot/UserBotIndexView'
 import UserAccountLoginView from '@/views/user/account/UserAccountLoginView'
 import UserAccountRegisterView from '@/views/user/account/UserAccountRegisterView'
 import UserMyspaceUserProfileView from '@/views/user/myspace/UserMyspaceUserProfileView'
+import ChatIndexView from '@/views/user/chat/ChatIndexView'
 import NotFound from '@/views/error/NotFound'
 import store from '@/store/index'
 
@@ -67,6 +68,16 @@ const routes = [
       requestAuth: true,
     }
   },
+
+  {
+    path: '/user/chat/',
+    name: 'userchat',
+    component: ChatIndexView,
+    meta: {
+      requestAuth: true,
+    }
+  },
+
   {
     path: "/user/account/login/",
     name: "login",

@@ -38,7 +38,7 @@ export default{
     const store = useStore();
     const follow = () =>{
       $.ajax({
-        url: "http://127.0.0.1:3000/user/myspace/friends/changefollow/",
+        url: "http://127.0.0.1:3000/api/user/myspace/friends/changefollow/",
         type: "post",
         data:{
           target_id: props.user.id,
@@ -56,7 +56,7 @@ export default{
 
     const unfollow = () => {
       $.ajax({
-          url: "http://127.0.0.1:3000/user/myspace/friends/changefollow/",
+          url: "http://127.0.0.1:3000/api/user/myspace/friends/changefollow/",
           type: "post",
           data:{
               target_id: props.user.id,

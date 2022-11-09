@@ -16,32 +16,32 @@ public class FriendsController {
     @Autowired
     private FriendsService friendsService;
 
-    @PostMapping("/user/myspace/friends/changefollow/")
+    @PostMapping("/api/user/myspace/friends/changefollow/")
     public Map<String, String> changeFollow(@RequestParam Map<String,String> map){
         int target_id = Integer.parseInt(map.get("target_id"));
         return friendsService.changeFollow(target_id);
     }
 
-    @GetMapping("/user/myspace/friends/isfollow/")
+    @GetMapping("/api/user/myspace/friends/isfollow/")
     public Map<String, String> isFollowed(@RequestParam Map<String,String> map){
         int target_id = Integer.parseInt(map.get("target_id"));
         return friendsService.isFollowed(target_id);
     }
 
     //最好返回map， 返回user到前端不安全
-    @GetMapping("/user/myspace/friends/follower/")
+    @GetMapping("/api/user/myspace/friends/follower/")
     public List<User> myFollower(@RequestParam Map<String, String> map){
         int target_id = Integer.parseInt(map.get("target_id"));
         return friendsService.myFollower(target_id);
     }
 
-    @GetMapping("/user/myspace/friends/focuser/")
+    @GetMapping("/api/user/myspace/friends/focuser/")
     public List<User> myFocuser(@RequestParam Map<String, String> map){
         int follower_id = Integer.parseInt(map.get("follower_id"));
         return friendsService.myFocuser(follower_id);
     }
 
-    @GetMapping("/user/myspace/friends/unfocus/")
+    @GetMapping("/api/user/myspace/friends/unfocus/")
     public List<User> myUnFocuser(@RequestParam Map<String, String> map){
         int follower_id = Integer.parseInt(map.get("follower_id"));
         return friendsService.myUnFocuser(follower_id);

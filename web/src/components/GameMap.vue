@@ -23,7 +23,6 @@ export default {
     let canvas = ref(null);
     const store = useStore();
 
-    console.log(store.state.pk.a_id, store.state.user.id);
     onMounted(() => {
       store.commit(
         "updateGameObject",

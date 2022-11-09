@@ -1,8 +1,8 @@
-package com.he.backend.consumer;
+package com.he.backend.consumerpk;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.he.backend.consumer.utils.Game;
-import com.he.backend.consumer.utils.JwtAuthentication;
+import com.he.backend.consumerpk.utils.Game;
+import com.he.backend.consumerpk.utils.JwtAuthentication;
 import com.he.backend.mapper.BotMapper;
 import com.he.backend.mapper.RecordMapper;
 import com.he.backend.mapper.UserMapper;
@@ -18,14 +18,12 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 @Component
-@ServerEndpoint("/websocket/{token}")  // 注意不要以'/'结尾
-public class WebSocketServer {
-    public static final ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();  //线程安全 static对所有实例可见
+@ServerEndpoint("/websocket/pk/{token}")  // 注意不要以'/'结尾
+public class PkWebSocketServer {
+    public static final ConcurrentHashMap<Integer, PkWebSocketServer> users = new ConcurrentHashMap<>();  //线程安全 static对所有实例可见
     private Session session = null;
     private User user;
     public static UserMapper userMapper;
@@ -39,21 +37,21 @@ public class WebSocketServer {
 
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
-        WebSocketServer.userMapper = userMapper;
+        PkWebSocketServer.userMapper = userMapper;
     }
 
     @Autowired
     public void setRecordMapper(RecordMapper recordMapper) {
-        WebSocketServer.recordMapper = recordMapper;
+        PkWebSocketServer.recordMapper = recordMapper;
     }
 
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate){ //在两个spring中通信
-        WebSocketServer.restTemplate = restTemplate;
+        PkWebSocketServer.restTemplate = restTemplate;
     }
     @Autowired
     public void setBotMapper(BotMapper botMapper){
-        WebSocketServer.botMapper = botMapper;
+        PkWebSocketServer.botMapper = botMapper;
     }
 
     @OnOpen
@@ -85,7 +83,6 @@ public class WebSocketServer {
     public static void startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId) {
         User a = userMapper.selectById(aId), b = userMapper.selectById(bId);
         Bot botA = botMapper.selectById(aBotId) , botB = botMapper.selectById(bBotId);
-
 
         Game game = new Game(13,
                 14,

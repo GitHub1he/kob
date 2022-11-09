@@ -74,7 +74,7 @@ export default {
 
     const init = (userId) => {
       $.ajax({
-        url: 'http://127.0.0.1:3000/user/account/info/get/',
+        url: 'http://127.0.0.1:3000/api/user/account/info/get/',
         type: 'GET',
         data: {
           user_id: userId,
@@ -84,7 +84,7 @@ export default {
         },
         success(resp) {
           $.ajax({
-            url: 'http://127.0.0.1:3000/user/myspace/friends/isfollow/',
+            url: 'http://127.0.0.1:3000/api/user/myspace/friends/isfollow/',
             type: 'GET',
             data: {
               target_id: userId,
@@ -105,7 +105,7 @@ export default {
       });
 
       $.ajax({
-        url: 'http://127.0.0.1:3000/user/myspace/posts/get/',
+        url: 'http://127.0.0.1:3000/api/user/myspace/posts/get/',
         type: 'GET',
         data: {
           user_id: userId,
@@ -120,7 +120,7 @@ export default {
       });
 
       $.ajax({
-        url: 'http://127.0.0.1:3000/user/account/userlist/',
+        url: 'http://127.0.0.1:3000/api/user/account/userlist/',
         type: "get",
         headers:{
           'Authorization': "Bearer " + store.state.user.token,
@@ -185,7 +185,7 @@ export default {
 
     const mydiscover = () => {
       $.ajax({
-        url: 'http://127.0.0.1:3000/user/myspace/friends/unfocus/',
+        url: 'http://127.0.0.1:3000/api/user/myspace/friends/unfocus/',
         type: 'GET',
         data: {
           follower_id: store.state.user.id,
@@ -202,7 +202,7 @@ export default {
 
     const myfollower = () => {
       $.ajax({
-        url: 'http://127.0.0.1:3000/user/myspace/friends/follower/',
+        url: 'http://127.0.0.1:3000/api/user/myspace/friends/follower/',
         type: 'GET',
         data: {
           target_id: store.state.user.id,
@@ -219,7 +219,7 @@ export default {
 
     const myfocuser = () => {
       $.ajax({
-        url: 'http://127.0.0.1:3000/user/myspace/friends/focuser/',
+        url: 'http://127.0.0.1:3000/api/user/myspace/friends/focuser/',
         type: 'GET',
         data: {
           follower_id: store.state.user.id,

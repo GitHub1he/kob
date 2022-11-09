@@ -37,7 +37,7 @@ export default {
 
         const del_post = post_id =>{
             $.ajax({
-              url: "http://localhost:3000/user/myspace/posts/del/",
+              url: "http://localhost:3000/api/user/myspace/posts/del/",
               type: "DELETE",
               data:{
                 post_id

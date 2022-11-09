@@ -13,23 +13,23 @@ public class BotController {
     @Autowired
     private BotService botService;
 
-    @PostMapping("/user/bot/add/")
+    @PostMapping("/api/user/bot/add/")
     public Map<String, String> botAdd(@RequestParam Map<String, String> data){
         return botService.botAdd(data);
     }
 
-    @DeleteMapping("/user/bot/del/")
+    @DeleteMapping("/api/user/bot/del/")
     public Map<String, String> botDel(@RequestParam Map<String, String> data){
         String bot_id = data.get("bot_id");
         return botService.botDel(bot_id);
     }
 
-    @PostMapping("/user/bot/update/")
+    @PostMapping("/api/user/bot/update/")
     public Map<String, String> botUpd(@RequestParam Map<String, String> data) {
         return botService.botUpd(data);
     }
 
-    @GetMapping("/user/bot/getlist/")
+    @GetMapping("/api/user/bot/getlist/")
     public List<Bot> getBotList(){
         return botService.botGetList();
     }

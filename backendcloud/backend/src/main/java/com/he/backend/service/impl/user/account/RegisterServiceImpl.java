@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,7 +63,8 @@ public class RegisterServiceImpl implements RegisterService {
 
         String encodedPassword = passwordEncoder.encode(password);
         String photo = "https://baomidou.com/img/logo.svg";
-        User registerUser = new User(null,username,encodedPassword,photo,null,null);
+        Date now = new Date();
+        User registerUser = new User(null,username,encodedPassword,photo,null,null,now);
         userMapper.insert(registerUser);
 
         map.put("error_message","success");

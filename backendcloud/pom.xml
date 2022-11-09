@@ -7,6 +7,7 @@
         <module>matchingsystem</module>
         <module>backend</module>
         <module>botrunningsystem</module>
+        <module>chatsystem</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -22,17 +23,18 @@
     <properties>
         <java.version>1.8</java.version>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
-            <version>2021.0.4</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2021.0.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
-    </dependencies>
-
+        </dependencies>
+    </dependencyManagement>
     <build>
         <plugins>
             <plugin>

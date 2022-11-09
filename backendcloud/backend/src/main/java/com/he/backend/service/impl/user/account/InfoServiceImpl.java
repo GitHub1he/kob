@@ -5,6 +5,7 @@ import com.he.backend.mapper.UserMapper;
 import com.he.backend.pojo.User;
 import com.he.backend.service.impl.utils.UserDetailsImpl;
 import com.he.backend.service.user.account.InfoService;
+import com.he.backend.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +21,7 @@ public class InfoServiceImpl implements InfoService {
     private UserMapper userMapper;
     @Override
     public Map<String, String> getInfo() {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         Map<String, String> map = new HashMap<>();
         map.put("error_message" , "success");
@@ -32,6 +29,8 @@ public class InfoServiceImpl implements InfoService {
         map.put("username", user.getUsername());
         map.put("photo", user.getPhoto());
         map.put("followercount", user.getFollowercount().toString());
+        map.put("rating", user.getRating().toString());
+        map.put("last_login_time", user.getLastLoginTime().toString());
         return map;
     }
 
@@ -61,6 +60,8 @@ public class InfoServiceImpl implements InfoService {
         map.put("username", user.getUsername());
         map.put("photo", user.getPhoto());
         map.put("followercount", user.getFollowercount().toString());
+        map.put("rating", user.getRating().toString());
+        map.put("last_login_time", user.getLastLoginTime().toString());
         return map;
     }
 }

@@ -63,6 +63,7 @@ export class GameMap extends AcGameObject {
         else if(e.key === 's' || e.key === 'ArrowDown') d = 2;
         else if(e.key === 'a' || e.key === 'ArrowLeft') d = 3;
 
+        console.log("前端发送方向: "+d);
         if(d >= 0) {
           this.store.state.pk.socket.send(JSON.stringify({
             event: "move", 

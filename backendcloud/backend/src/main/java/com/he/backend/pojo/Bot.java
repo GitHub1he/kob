@@ -15,7 +15,7 @@ import java.util.Date;
 public class Bot {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    private int userId;
+    private Integer userId;
     private String title;
     private String description;
     private String content;

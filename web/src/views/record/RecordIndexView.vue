@@ -102,7 +102,7 @@ export default{
     const pull_page = page => {
       current_page = page;
       $.ajax({
-        url: "http://127.0.0.1:3000/record/getlist/",
+        url: "http://127.0.0.1:3000/api/record/getlist/",
         type: "GET",
         data: {
           page,
@@ -136,7 +136,6 @@ export default{
     const open_record_content = recordId => {
       for (const record of records.value) {
         if (record.record.id === recordId) {
-          console.log(record.record, recordId);
           store.commit("updateIsRecord", true);
           store.commit('updateGame', {
             map: stringTo2D(record.record.map),

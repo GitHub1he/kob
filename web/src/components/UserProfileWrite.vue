@@ -21,7 +21,7 @@ export default {
 
       const submit_post = () =>{
           $.ajax({
-            url:"http://localhost:3000/user/myspace/posts/create/",
+            url:"http://localhost:3000/api/user/myspace/posts/create/",
             type: "POST",
             data : {
               content: content.value,

@@ -13,19 +13,19 @@ public class PostsController {
     @Autowired
     private PostsService postsService;
 
-    @PostMapping("/user/myspace/posts/create/")
+    @PostMapping("/api/user/myspace/posts/create/")
     public Map<String,String> createpost(@RequestParam Map<String,String> map){
         String content = map.get("content");
         return postsService.createUserPost(content);
     }
 
-    @GetMapping("/user/myspace/posts/get/")
+    @GetMapping("/api/user/myspace/posts/get/")
     public List<Posts> getuserpost(@RequestParam Map<String,String> map){
         int user_id = Integer.parseInt(map.get("user_id"));
         return postsService.getPostByUserid(user_id);
     }
 
-    @DeleteMapping("/user/myspace/posts/del/")
+    @DeleteMapping("/api/user/myspace/posts/del/")
     public Map<String, String> deluserpost(@RequestParam Map<String,String> map){
         int post_id = Integer.parseInt(map.get("post_id"));
         return  postsService.delPostByPostid(post_id);

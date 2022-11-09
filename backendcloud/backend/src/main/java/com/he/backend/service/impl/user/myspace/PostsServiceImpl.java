@@ -6,6 +6,7 @@ import com.he.backend.pojo.Posts;
 import com.he.backend.pojo.User;
 import com.he.backend.service.impl.utils.UserDetailsImpl;
 import com.he.backend.service.user.myspace.PostsService;
+import com.he.backend.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,10 +23,7 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public Map<String, String> createUserPost(String content) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         postsMapper.insert(new Posts(null,user.getId(),content));
 
@@ -36,10 +34,7 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public List<Posts> getPostByUserid(int user_id) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         QueryWrapper<Posts> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",user_id);
@@ -50,10 +45,7 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public Map<String, String> delPostByPostid(int post_id) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         Map<String, String> map = new HashMap<>();
         Posts posts = postsMapper.selectById(post_id);

@@ -15,17 +15,17 @@ public class InfoController {
     @Autowired
     private InfoService infoService;
 
-    @GetMapping("/user/account/info/")
+    @GetMapping("/api/user/account/info/")
     public Map<String, String> getInfo(){
         return infoService.getInfo();
     }
 
-    @GetMapping("/user/account/userlist/")
+    @GetMapping("/api/user/account/userlist/")
     public List<User> userList(){
         return infoService.userList();
     }
 
-    @GetMapping("/user/account/info/get/")
+    @GetMapping("/api/user/account/info/get/")
     public Map<String, String> getInfoById(@RequestParam Map<String,String> map){
         int user_id = Integer.parseInt(map.get("user_id"));
         return infoService.getInfoById(user_id);

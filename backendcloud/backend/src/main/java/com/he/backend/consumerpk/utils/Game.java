@@ -1,7 +1,7 @@
-package com.he.backend.consumer.utils;
+package com.he.backend.consumerpk.utils;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.he.backend.consumer.WebSocketServer;
+import com.he.backend.consumerpk.PkWebSocketServer;
 import com.he.backend.pojo.Bot;
 import com.he.backend.pojo.Record;
 import com.he.backend.pojo.User;
@@ -155,11 +155,11 @@ public class Game extends Thread{
         if (player.getBotId().equals(-1)) return; //亲自出马，不需要执行代码
 
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        data.add("user_id", player.getBotId().toString());
+        data.add("user_id", player.getId().toString());
         data.add("bot_code", player.getBotCode());
         data.add("input", getInput(player));
 
-        WebSocketServer.restTemplate.postForObject(addBotUrl, data, String.class);
+        PkWebSocketServer.restTemplate.postForObject(addBotUrl, data, String.class);
     }
     private boolean nextStep(){ //等待两名玩家的下一步操作
         try {
@@ -192,10 +192,10 @@ public class Game extends Thread{
     }
 
     private void sendAllMessage(String message) {
-        if(WebSocketServer.users.get(playerA.getId()) != null)
-            WebSocketServer.users.get(playerA.getId()).sendMessage(message);
-        if(WebSocketServer.users.get(playerB.getId()) != null)
-            WebSocketServer.users.get(playerB.getId()).sendMessage(message);
+        if(PkWebSocketServer.users.get(playerA.getId()) != null)
+            PkWebSocketServer.users.get(playerA.getId()).sendMessage(message);
+        if(PkWebSocketServer.users.get(playerB.getId()) != null)
+            PkWebSocketServer.users.get(playerB.getId()).sendMessage(message);
     }
     private boolean check_valid(List<Cell> cells1, List<Cell> cells2){ //判断第一条蛇与第二条蛇是否相撞
         int n = cells1.size();
@@ -251,8 +251,8 @@ public class Game extends Thread{
     }
 
     private void saveToDatabase() {
-        User userA = WebSocketServer.userMapper.selectById(playerA.getId());
-        User userB = WebSocketServer.userMapper.selectById(playerB.getId());
+        User userA = PkWebSocketServer.userMapper.selectById(playerA.getId());
+        User userB = PkWebSocketServer.userMapper.selectById(playerB.getId());
 
         if("all".equals(winer)) {
             userA.setRating(userA.getRating() + 1);
@@ -265,8 +265,8 @@ public class Game extends Thread{
             userB.setRating(userB.getRating() +5);
         }
 
-        WebSocketServer.userMapper.updateById(userA);
-        WebSocketServer.userMapper.updateById(userB);
+        PkWebSocketServer.userMapper.updateById(userA);
+        PkWebSocketServer.userMapper.updateById(userB);
 
         Record record = new Record(
             null,
@@ -282,7 +282,7 @@ public class Game extends Thread{
             winer,
             new Date()
         );
-        WebSocketServer.recordMapper.insert(record);
+        PkWebSocketServer.recordMapper.insert(record);
     }
     private void sendResult() { //向两个client公布结果
         JSONObject resp = new JSONObject();

@@ -7,15 +7,13 @@ import com.he.backend.pojo.Bot;
 import com.he.backend.pojo.User;
 import com.he.backend.service.impl.utils.UserDetailsImpl;
 import com.he.backend.service.user.bot.BotService;
+import com.he.backend.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class BotServiceImpl implements BotService {
@@ -24,11 +22,7 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Map<String, String> botAdd(Map<String, String> data) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();;
 
         String title = data.get("title");
         String description = data.get("description");
@@ -75,15 +69,11 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Map<String, String> botDel(String bot_id) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         Map<String, String> map = new HashMap<>();
         Bot bot = botMapper.selectById(bot_id);
-        if(bot == null || bot.getUserId() != user.getId()){
+        if(bot == null || !Objects.equals(bot.getUserId(), user.getId())){
             map.put("error_message","bot不存在或已被删除");
             return map;
         }
@@ -96,20 +86,16 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Map<String, String> botUpd(Map<String, String> data) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         String bot_id = data.get("bot_id");
         String title = data.get("title");
-        String description = data.get("descriptioin");
+        String description = data.get("description");
         String content = data.get("content");
 
         Map<String, String> map = new HashMap<>();
         Bot bot = botMapper.selectById(bot_id);
-        if(bot == null || bot.getUserId() != user.getId()){
+        if(bot == null || !Objects.equals(bot.getUserId(), user.getId())){
             map.put("error_message","bot不存在或已被删除");
             return map;
         }
@@ -130,11 +116,7 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public List<Bot> botGetList() {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authenticationToken.getPrincipal();
-        User user = userDetails.getUser();
+        User user = UserUtil.getUser();
 
         QueryWrapper<Bot> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", user.getId());
