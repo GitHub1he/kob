@@ -18,6 +18,11 @@
         </li>
     </ul>
     <ul class="navbar-nav" v-if="$store.state.user.is_login">
+      <li class="nav-item">
+        <router-link :class="route_name == 'userchat' ? 'nav-link active' : 'nav-link'" :to="{name: 'userchat'}">
+          <img src="https://cdn.acwing.com/media/file_system/file/application/icon/2220490481555590627-128_UQONKkk.png" alt="聊天">
+        </router-link>
+        </li>
       <li class="nav-item dropdown">
         <div class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           {{ $store.state.user.username }}
@@ -73,5 +78,7 @@ export default {
 </script>
 
 <style scoped>
-
+img {
+  height: 3vh;
+}
 </style>

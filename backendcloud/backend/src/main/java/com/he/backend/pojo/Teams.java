@@ -16,6 +16,7 @@ public class Teams {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name;
+    private String photo;
     private Integer ownerId;
     private Integer personCount;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")

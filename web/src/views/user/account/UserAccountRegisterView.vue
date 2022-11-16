@@ -59,7 +59,7 @@ export default{
               success() {
                 store.dispatch("getinfo",{
                   success() {
-                    router.push({ name: 'pk_index' });
+                    router.push({ name: 'home' });
                   },
                   error() {
                     console.log("获取用户失败,请重新输入");

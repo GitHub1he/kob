@@ -31,7 +31,7 @@ public class TeamDetailServiceImpl implements TeamDetailService {
         Teams teams = teamMapper.selectById(teamId);
         User user = UserUtil.getUser();
 
-        if(Objects.equals(user.getId(), teams.getOwnerId()) || Objects.equals(user.getId(), userId)) {
+        if(teams != null && user != null && Objects.equals(user.getId(), teams.getOwnerId()) || Objects.equals(user.getId(), userId)) {
             QueryWrapper<TeamsDetail> tdqueryWrapper = new QueryWrapper<>();
             tdqueryWrapper.eq("team_id", teamId).eq("user_id", userId);
             List<TeamsDetail> teamsDetails = teamDetailMapper.selectList(tdqueryWrapper);

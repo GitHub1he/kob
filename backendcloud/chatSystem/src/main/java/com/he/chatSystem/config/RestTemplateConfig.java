@@ -1,4 +1,4 @@
-package com.he.chatsystem.config;
+package com.he.chatSystem.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

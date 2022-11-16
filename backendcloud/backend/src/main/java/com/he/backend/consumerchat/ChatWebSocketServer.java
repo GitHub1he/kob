@@ -1,8 +1,7 @@
 package com.he.backend.consumerchat;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.he.backend.consumerchat.utils.ChatRecordPool;
-import com.he.backend.consumerchat.utils.SendChating;
+import com.he.backend.consumerchat.utils.Chating;
 import com.he.backend.consumerpk.utils.JwtAuthentication;
 import com.he.backend.mapper.ChatMapper;
 import com.he.backend.mapper.TeamDetailMapper;
@@ -23,16 +22,13 @@ public class ChatWebSocketServer {
     public static final ConcurrentHashMap<Integer, ChatWebSocketServer> users = new ConcurrentHashMap<>();
     private Session session = null;
     private User user;
-    public SendChating sendChating = null;
-    public static UserMapper userMapper;
+    public Chating chating = null;
+    public static UserMapper chatuserMapper;
     public static ChatMapper chatMapper;
     public static TeamDetailMapper teamDetailMapper;
-    public final static ChatRecordPool chatRecordPool = new ChatRecordPool();
-
-    private static final String sendChatUrl = "http://127.0.0.1:3003/user/chat/send/";
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
-        ChatWebSocketServer.userMapper = userMapper;
+        ChatWebSocketServer.chatuserMapper = userMapper;
     }
     @Autowired
     public void setTeamDetailMapper(TeamDetailMapper teamDetailMapper) {
@@ -47,14 +43,13 @@ public class ChatWebSocketServer {
     public void onOpen(Session session, @PathParam("token") String token) throws IOException {
         // 建立连接
         this.session = session;
-        System.out.println("connected!");
-
+        System.out.println("chat_connected!");
         Integer userId = JwtAuthentication.getUserId(token);
 
-        this.user = userMapper.selectById(userId);
+        this.user = chatuserMapper.selectById(userId);
         if(this.user != null) {
             users.put(userId, this);
-
+            this.chating = new Chating(userId);
         }else {
             this.session.close();
         }
@@ -63,7 +58,7 @@ public class ChatWebSocketServer {
     @OnClose
     public void onClose() {
         // 关闭链接
-        System.out.println("disconnected!");
+        System.out.println("chat_disconnected!");
 
         if(this.user != null) {
             users.remove(this.user.getId());
@@ -71,12 +66,16 @@ public class ChatWebSocketServer {
     }
 
     public static void sendChat(Integer senderId, Integer receiverId, String content) {
-        System.out.println("wsSendMessage");
-        SendChating sendChating = new SendChating(senderId, receiverId, content);
+        System.out.println("ws-Send-Message");
         if(users.get(senderId) != null) {
-            users.get(senderId).sendChating = sendChating;
-            sendChating.start();
+            users.get(senderId).chating.sendChat(receiverId, content);
         }else System.out.println("发送者不存在");
+    }
+    public static void receiveChat(Integer id) {
+        System.out.println("ws-Receive-Message");
+        if(users.get(id) != null) {
+            users.get(id).chating.receiveChat(id);
+        }else System.out.println("接收者不存在");
     }
 
     @OnMessage
@@ -90,10 +89,8 @@ public class ChatWebSocketServer {
             Integer receiverId = data.getInteger("receiver_id");
             String content = data.getString("content");
             sendChat(senderId, receiverId, content);
-        } else if ("stop-matching".equals(event)) {
-//            stopMatching();
-        } else if ("move".equals(event)){
-//            move(data.getInteger("direction"));
+        } else if ("receive-message".equals(event)) {
+            receiveChat(this.user.getId());
         }
     }
 

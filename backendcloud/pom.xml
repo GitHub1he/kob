@@ -8,6 +8,7 @@
         <module>backend</module>
         <module>botrunningsystem</module>
         <module>chatsystem</module>
+        <module>chatSystem</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

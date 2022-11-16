@@ -44,7 +44,7 @@ public class TeamServiceImpl implements TeamService {
             return res;
         }
 
-        Teams newteam = new Teams(null, name, ownerId, 1,now,now);
+        Teams newteam = new Teams(null, name,null, ownerId, 1,now,now);
         teamMapper.insert(newteam);
 
         List<Teams> teamsList = teamMapper.selectList(teamsQueryWrapper);
@@ -88,7 +88,7 @@ public class TeamServiceImpl implements TeamService {
         if(name == null || "".equals(name)) name = teams.getName();
         if(ownerId == 0) ownerId = teams.getOwnerId();
         Date now = new Date();
-        Teams newteam = new Teams(id, name, ownerId, teams.getPersonCount(), teams.getCreatetime(), now);
+        Teams newteam = new Teams(id, name, null, ownerId, teams.getPersonCount(), teams.getCreatetime(), now);
         teamMapper.updateById(newteam);
         res.put("error_message", "success");
         return res;

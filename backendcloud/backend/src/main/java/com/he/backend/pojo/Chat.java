@@ -18,6 +18,9 @@ public class Chat {
     private Integer senderId;
     private Integer receiverId;
     private String content;
+    private Integer status;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date sendtime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
+    private Date modifytime;
 }

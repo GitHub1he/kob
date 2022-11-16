@@ -26,7 +26,7 @@ public class PkWebSocketServer {
     public static final ConcurrentHashMap<Integer, PkWebSocketServer> users = new ConcurrentHashMap<>();  //线程安全 static对所有实例可见
     private Session session = null;
     private User user;
-    public static UserMapper userMapper;
+    public static UserMapper pkUserMapper;
     public static RecordMapper recordMapper;
     public static RestTemplate restTemplate;
     private static BotMapper botMapper;
@@ -37,7 +37,7 @@ public class PkWebSocketServer {
 
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
-        PkWebSocketServer.userMapper = userMapper;
+        PkWebSocketServer.pkUserMapper = userMapper;
     }
 
     @Autowired
@@ -62,7 +62,7 @@ public class PkWebSocketServer {
 
         Integer userId = JwtAuthentication.getUserId(token);
 
-        this.user = userMapper.selectById(userId);
+        this.user = pkUserMapper.selectById(userId);
         if(this.user != null) {
             users.put(userId, this);
         }else {
@@ -81,7 +81,7 @@ public class PkWebSocketServer {
     }
 
     public static void startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId) {
-        User a = userMapper.selectById(aId), b = userMapper.selectById(bId);
+        User a = pkUserMapper.selectById(aId), b = pkUserMapper.selectById(bId);
         Bot botA = botMapper.selectById(aBotId) , botB = botMapper.selectById(bBotId);
 
         Game game = new Game(13,

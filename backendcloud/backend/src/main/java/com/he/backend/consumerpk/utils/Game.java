@@ -251,8 +251,8 @@ public class Game extends Thread{
     }
 
     private void saveToDatabase() {
-        User userA = PkWebSocketServer.userMapper.selectById(playerA.getId());
-        User userB = PkWebSocketServer.userMapper.selectById(playerB.getId());
+        User userA = PkWebSocketServer.pkUserMapper.selectById(playerA.getId());
+        User userB = PkWebSocketServer.pkUserMapper.selectById(playerB.getId());
 
         if("all".equals(winer)) {
             userA.setRating(userA.getRating() + 1);
@@ -265,8 +265,8 @@ public class Game extends Thread{
             userB.setRating(userB.getRating() +5);
         }
 
-        PkWebSocketServer.userMapper.updateById(userA);
-        PkWebSocketServer.userMapper.updateById(userB);
+        PkWebSocketServer.pkUserMapper.updateById(userA);
+        PkWebSocketServer.pkUserMapper.updateById(userB);
 
         Record record = new Record(
             null,

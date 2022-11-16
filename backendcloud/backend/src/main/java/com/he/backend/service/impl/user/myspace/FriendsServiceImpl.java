@@ -1,8 +1,10 @@
 package com.he.backend.service.impl.user.myspace;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.he.backend.mapper.ChatMapper;
 import com.he.backend.mapper.FriendsMapper;
 import com.he.backend.mapper.UserMapper;
+import com.he.backend.pojo.Chat;
 import com.he.backend.pojo.Friends;
 import com.he.backend.pojo.User;
 import com.he.backend.service.impl.utils.UserDetailsImpl;
@@ -13,10 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class FriendsServiceImpl implements FriendsService {
@@ -24,6 +23,8 @@ public class FriendsServiceImpl implements FriendsService {
     private FriendsMapper friendsMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ChatMapper chatMapper;
 
     @Override
     public Map<String, String> changeFollow(int target_id) {
@@ -39,6 +40,9 @@ public class FriendsServiceImpl implements FriendsService {
             User needUpdateUser = userMapper.selectById(target_id);
             needUpdateUser.setFollowercount(needUpdateUser.getFollowercount() + 1);
             userMapper.updateById(needUpdateUser);
+            //发送消息
+            Date now = new Date();
+            chatMapper.insert(new Chat(null, user.getId(), target_id, "和我聊天，不要不识好歹！", null, now, now));
         }else {
             friendsMapper.deleteById(friends);
 
@@ -46,6 +50,11 @@ public class FriendsServiceImpl implements FriendsService {
             User needUpdateUser = userMapper.selectById(target_id);
             needUpdateUser.setFollowercount(needUpdateUser.getFollowercount() - 1);
             userMapper.updateById(needUpdateUser);
+            QueryWrapper<Chat> chatQueryWrapper = new QueryWrapper<>();
+            chatQueryWrapper.eq("sender_id", user.getId()).eq("receiver_id", target_id)
+                    .or().eq("sender_id", target_id).eq("receiver_id", user.getId())
+                    .orderByAsc("id");
+            chatMapper.delete(chatQueryWrapper);
         }
         Map<String, String> map = new HashMap<>();
         map.put("error_message","success");

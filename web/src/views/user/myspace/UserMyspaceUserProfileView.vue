@@ -300,9 +300,5 @@ img{
 .img-myspace-bar {
   width: 30px;
   height: 30px;
-
 }
-
-
-
 </style>

@@ -1,4 +1,4 @@
-package com.he.chatsystem.config;
+package com.he.chatSystem.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
