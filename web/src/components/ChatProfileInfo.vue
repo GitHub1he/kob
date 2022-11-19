@@ -1,14 +1,14 @@
 <template>
   <div class="card card-profile">
-      <button @click="open_user_profile($store.state.chat.chatuserid)" type="button" class="btn btn-user-space btn-outline-info">
+      <button @click="$store.state.chat.option === 'friends' ? 'open_user_profile($store.state.chat.chatuserid)' : '#'" type="button" class="btn btn-user-space btn-outline-info">
         <img class="img-fluid" :src="$store.state.chat.chatuserphoto" alt="对面头像">
         &nbsp;
         <span style="font-weight: bold;font-size: large;">{{ $store.state.chat.chatusername }}</span>
         &nbsp;
         <span style="color: rgb(133, 133, 133);font-size: small;">{{ $store.state.chat.chatuserlastlogintime }}</span>
       </button>
-    <div class="card-body" id="show_words" updated>
-      <div  class="chat-list-body" v-for="content in $store.state.chat.currentconents" :key="content.id"> <!-- :style="content.is_oneself ? 'float: right' : 'float: left'" -->
+    <div class="card-body" id="show_words" updated v-if="$store.state.chat.option === 'friends'">
+      <div   v-for="content in $store.state.chat.currentconents" :key="content.id"> <!-- :style="content.is_oneself ? 'float: right' : 'float: left'" -->
         <div class="mysend" v-if="content.is_oneself">
           <div class="info">
             <p class="time">
@@ -29,6 +29,29 @@
             <div class="info-content">{{ content.content }}</div>
           </div>
           
+        </div>
+      </div>
+    </div>
+    <div class="card-body" id="show_words" updated v-if="$store.state.chat.option === 'teams'">
+      <div  v-for="content in $store.state.chat.currentconents" :key="content.id">
+        <div class="mysend" v-if="content.is_oneself">
+          <div class="info">
+            <p class="time">
+              {{ content.sendtime }} {{ $store.state.user.username }}
+            </p>
+            <div class="info-content">{{ content.content }}</div>
+          </div>
+          <img :src="$store.state.user.photo" alt="我的头像">
+        </div>
+        <div class="myreceive" v-else>
+          <img :src="content.user_photo" alt="对面的头像">
+          <div class="info">
+            <p class="time"> 
+              {{ content.user_name }} {{ content.sendtime }}
+              <span class="status" :style="content.status === 0 ? 'color : red' : 'color : green'">```</span>
+            </p>
+            <div class="info-content">{{ content.content }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -68,8 +91,12 @@ export default {
 </script>
 
 <style scoped>
+img {
+  width: 7vh;
+  height: 7vh;
+}  
 .card-profile {
-  height: 60vh;
+  height: 65vh;
 }
 .card-profile .card-body {
   padding: 0;
@@ -78,12 +105,6 @@ export default {
 .btn-user-space {
   width: 100%;
   height: 15%;
-}
-img {
-  width: 7vh;
-}
-.chat-list-body {
-  margin-top: 1vh;
 }
 .mysend {
   display: flex;
@@ -129,8 +150,9 @@ img {
   display: flex;
 }
 .myreceive .info{
+  width: 90%;
   margin-left: 10px;
-  text-align: center;
+  text-align: left;
 }
 .myreceive .info .time{
   font-size: 12px;
@@ -141,11 +163,14 @@ img {
   margin-top: -5px;
 }
 .myreceive .info .info-content{
+  max-width: 70%;
   padding: 10px;
   font-size: 14px;
-  background: rgb(147, 211, 142);
+  float: left;
+  margin-left: 10px;
   position: relative;
   margin-top: 8px;
+  background: rgb(147, 211, 142);
 }
 /* 小三角形 */
 .myreceive .info .info-content::before{

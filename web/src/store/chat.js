@@ -7,9 +7,7 @@ export default {
     chatuserphoto: "",
     chatuserlastlogintime: "", 
     currentconents: null,
-    receivecontents: [{
-      
-    }],
+    receivecontents: [{}],
   },
   getters: {
   },

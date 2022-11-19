@@ -5,6 +5,7 @@ import com.he.backend.consumerchat.utils.Chating;
 import com.he.backend.consumerpk.utils.JwtAuthentication;
 import com.he.backend.mapper.ChatMapper;
 import com.he.backend.mapper.TeamDetailMapper;
+import com.he.backend.mapper.TeamMapper;
 import com.he.backend.mapper.UserMapper;
 import com.he.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class ChatWebSocketServer {
     public Chating chating = null;
     public static UserMapper chatuserMapper;
     public static ChatMapper chatMapper;
+    public static TeamMapper teamMapper;
     public static TeamDetailMapper teamDetailMapper;
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
@@ -38,7 +40,10 @@ public class ChatWebSocketServer {
     public void setChatMapper(ChatMapper chatMapper) {
         ChatWebSocketServer.chatMapper = chatMapper;
     }
-
+    @Autowired
+    public void setTeamMapper(TeamMapper teamMapper) {
+        ChatWebSocketServer.teamMapper = teamMapper;
+    }
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token) throws IOException {
         // 建立连接
@@ -91,6 +96,12 @@ public class ChatWebSocketServer {
             sendChat(senderId, receiverId, content);
         } else if ("receive-message".equals(event)) {
             receiveChat(this.user.getId());
+        } else if ("receive-team-message".equals(event)) {
+            Integer id = this.user.getId();
+            System.out.println("ws-team-Receive-Message");
+            if(users.get(id) != null) {
+                users.get(id).chating.receiveTeamChat(id);
+            }else System.out.println("接收者不存在");
         }
     }
 

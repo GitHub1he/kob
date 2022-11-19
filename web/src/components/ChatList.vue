@@ -11,13 +11,23 @@
   <button @click="click_option_friends" type="button" :class="$store.state.chat.option === 'friends' ? 'btn btn-check-isfriend btn-outline-success active' : 'btn btn-check-isfriend btn-outline-success'">好友</button>
   <button @click="click_option_team" type="button" :class="$store.state.chat.option === 'team' ? 'btn btn-check-isfriend btn-outline-success active' : 'btn btn-check-isfriend btn-outline-success'">群聊</button>
   <div class="card chatlistprofile">
-    <div class="card-body"> 
+    <div class="card-body" v-if="$store.state.chat.option === 'friends'"> 
       <div class="card chatlist-item" v-for="user in users.value" :key="user.id"> 
         <div class="card-body"> 
           <button @click="check_chatuser(user)" type="button" class="btn chatlist-btn btn-outline-info">
             <img :src="user.photo" alt="">
             <span >{{ user.name }}</span>
             <span class="status" :style="user.contents[user.contents.length-1].status === 0 ? 'color : red' : 'color : green'">*</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" v-if="$store.state.chat.option === 'teams'"> 
+      <div class="card chatlist-item" v-for="team in teams.value" :key="team.id"> 
+        <div class="card-body"> 
+          <button @click="check_chatuser(team)" type="button" class="btn chatlist-btn btn-outline-info">
+            <img :src="team.photo" alt="">
+            <span >{{ team.name }}({{ team.person_count}})</span>
           </button>
         </div>
       </div>
@@ -36,6 +46,10 @@ export default {
       type: Object,
       required: true,
     },
+    teams: {
+      type: Object,
+      required: true,
+    },
   },
   setup() {
     const store = useStore();
@@ -48,13 +62,32 @@ export default {
     };
 
     const click_option_friends = () => {
+      store.commit('updateOption', "friends");
+      store.commit("updateChatUser", {
+        id: "",
+        username: "",
+        photo: "", 
+        lastlogintime: "",
+        currentconents: null,
+      });
+      store.commit("updatereceiveContents", []);
       store.state.chat.chatsocket.send(JSON.stringify({
         event: "receive-message",
       }));
-      store.commit('updateOption', "friends");
     };
     const click_option_team = () => {
-      store.commit('updateOption', "team");
+      store.commit('updateOption', "teams");
+      store.commit("updateChatUser", {
+        id: "",
+        username: "",
+        photo: "", 
+        lastlogintime: "",
+        currentconents: null,
+      });
+      store.commit("updatereceiveContents", []);
+      store.state.chat.chatsocket.send(JSON.stringify({
+        event: "receive-team-message",
+      }));
     };
 
     const check_chatuser = user => {
@@ -102,7 +135,10 @@ export default {
   padding: 0;
   height: 100%;
 }
-
+.btn-check-isfriend{
+  width: 50%;
+  height: 5vh;
+}
 .chatlistprofile {
   height: 65vh;
   overflow: auto;
@@ -128,10 +164,6 @@ img {
   overflow:hidden;
   text-overflow:ellipsis;
 }
-.btn-check-isfriend{
-  width: 50%;
-}
-
 .chatlist-btn {
   width: 100%;
   height: 8vh;

@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.he.backend.consumerchat.ChatWebSocketServer;
 import com.he.backend.pojo.Chat;
+import com.he.backend.pojo.Teams;
 import com.he.backend.pojo.TeamsDetail;
 import com.he.backend.pojo.User;
 
@@ -36,14 +37,19 @@ public class Chating{
         //是个群
         return receiver_id > 90000;
     }
-    private JSONObject senderMessage(String content) {
+    private JSONObject senderMessage(Integer sender_id, String content) {
         Date now = new Date();
         JSONObject isSendItem = new JSONObject();
-        isSendItem.put("id", this.id);
+        isSendItem.put("id", sender_id);
         isSendItem.put("name", this.username);
         isSendItem.put("photo", this.photo);
         isSendItem.put("last_login_time", this.last_login_time);
-        isSendItem.put("content", new ChatContent(null,false, content, 0, now));
+        if(isTeam(sender_id)) {
+            isSendItem.put("content", new TeamChatContent(
+                    null, false, this.username, this.photo, content, 0, now
+            ));
+        }
+        else isSendItem.put("content", new ChatContent(null,false, content, 0, now));
         return isSendItem;
     }
     private void saveToDatabase(Integer receiver_id, String content) {
@@ -52,6 +58,27 @@ public class Chating{
         ChatWebSocketServer.chatMapper.insert(chat);
     }
 
+    public void sendChat(Integer receiver_id, String content) {
+        JSONObject res = new JSONObject();
+        res.put("event", "receive_chat");
+        res.put("receive", senderMessage(this.id, content));
+
+        if(receiver_id == 0){ //向公屏发送 -> 所有在线的都可以收到
+            List<User> allUsers = ChatWebSocketServer.chatuserMapper.selectList(null);
+            for (User user : allUsers) {
+                if(ChatWebSocketServer.users.get(user.getId()) != null) {
+                    ChatWebSocketServer.users.get(user.getId()).sendMessage(res.toString());
+                }
+            }
+        }else if(isTeam(receiver_id)) {
+            sendTeamChat(receiver_id, content);
+        }else {
+            if(ChatWebSocketServer.users.get(receiver_id) != null) {
+                ChatWebSocketServer.users.get(receiver_id).sendMessage(res.toString());
+            }
+        }
+        saveToDatabase(receiver_id, content);
+    }
     /*
      * 在发送群消息时调用此方法
      *
@@ -66,12 +93,12 @@ public class Chating{
         teamsDetailQueryWrapper.eq("team_id", team_id);
         List<TeamsDetail> teamUsers = ChatWebSocketServer.teamDetailMapper.selectList(teamsDetailQueryWrapper); //组员
         for (TeamsDetail teamsuser : teamUsers) {
+            if(Objects.equals(teamsuser.getUserId(),this.id)) continue;
             User user = ChatWebSocketServer.chatuserMapper.selectById(teamsuser.getUserId());
             if(ChatWebSocketServer.users.get(teamsuser.getUserId()) != null) {
                 JSONObject res = new JSONObject();
                 res.put("event", "receive_chat");
-                res.put("user_id", user.getId());
-                res.put("is_receiver", senderMessage(content));
+                res.put("receive", senderMessage(team_id, content));
 
                 ChatWebSocketServer.users.get(user.getId()).sendMessage(res.toString());
             }
@@ -87,20 +114,41 @@ public class Chating{
      *   1. 查询组的聊天记录
      *   2. 返回本群记录
      * */
-    private List<JSONObject> receiveTeamChat(Integer user_id) {
-        List<JSONObject> res = new ArrayList<>();
+    private JSONObject teamChat(Integer user_id) {
+        JSONObject res = new JSONObject();
+        res.put("event", "history_team_chat");
+
+        List<JSONObject> items = new ArrayList<>();
         QueryWrapper<TeamsDetail> userInTeamQW = new QueryWrapper<>();
         userInTeamQW.eq("user_id", user_id);
         List<TeamsDetail> userInTeams = ChatWebSocketServer.teamDetailMapper.selectList(userInTeamQW);
         for (TeamsDetail userInTeam : userInTeams) {
-            JSONObject item = new JSONObject();
-            QueryWrapper<Chat> chatQueryWrapper = new QueryWrapper<>();
-            chatQueryWrapper.eq("receiver_id", userInTeam.getTeamId()).orderByAsc("id");
-            List<Chat> chats = ChatWebSocketServer.chatMapper.selectList(chatQueryWrapper);
-            item.put("team_id", userInTeam.getTeamId());
-            item.put("contents", chats);
-            res.add(item);
+            Teams team = ChatWebSocketServer.teamMapper.selectById(userInTeam.getTeamId());
+            if(team != null) {
+                JSONObject item = new JSONObject();
+                item.put("id", team.getId());
+                item.put("name", team.getName());
+                item.put("photo", team.getPhoto());
+                item.put("person_count", team.getPersonCount());
+                List<TeamChatContent> contents = new ArrayList<>();
+                QueryWrapper<Chat> chatQueryWrapper = new QueryWrapper<>();
+                chatQueryWrapper.eq("receiver_id", team.getId()).orderByAsc("id");
+                List<Chat> chats = ChatWebSocketServer.chatMapper.selectList(chatQueryWrapper);
+                for (Chat chat : chats) {
+                    User user = ChatWebSocketServer.chatuserMapper.selectById(chat.getSenderId());
+                    contents.add(new TeamChatContent(chat.getId(),
+                            Objects.equals(chat.getSenderId(), user_id),
+                            user.getUsername(),
+                            user.getPhoto(),
+                            chat.getContent(),
+                            chat.getStatus(),
+                            chat.getSendtime()));
+                }
+                item.put("contents", contents);
+                items.add(item);
+            }
         }
+        res.put("team_chat",items);
         return res;
     }
 
@@ -140,33 +188,13 @@ public class Chating{
             }
         }
         res.put("history", history);
-
-        res.put("team_chat", receiveTeamChat(id));
         return res;
     }
 
-    public void sendChat(Integer receiver_id, String content) {
-        JSONObject res = new JSONObject();
-        res.put("event", "receive_chat");
-        res.put("receive", senderMessage(content));
-
-        if(receiver_id == 0){ //向公屏发送 -> 所有在线的都可以收到
-            List<User> allUsers = ChatWebSocketServer.chatuserMapper.selectList(null);
-            for (User user : allUsers) {
-                if(ChatWebSocketServer.users.get(user.getId()) != null) {
-                    ChatWebSocketServer.users.get(user.getId()).sendMessage(res.toString());
-                }
-            }
-        }else if(isTeam(receiver_id)) {
-            sendTeamChat(receiver_id, content);
-        }else {
-            if(ChatWebSocketServer.users.get(receiver_id) != null) {
-                ChatWebSocketServer.users.get(receiver_id).sendMessage(res.toString());
-            }
-        }
-        saveToDatabase(receiver_id, content);
-    }
     public void receiveChat(Integer id) {
         ChatWebSocketServer.users.get(id).sendMessage(historyChat(id).toString());
+    }
+    public void receiveTeamChat(Integer id) {
+        ChatWebSocketServer.users.get(id).sendMessage(teamChat(id).toString());
     }
 }

@@ -44,11 +44,11 @@ export default {
 </script>
 
 <style scoped>
-.card-text .card-body {
-  padding: 0;
-}
 .card-text {
   height: 20vh;
+}
+.card-text .card-body {
+  padding: 0;
 }
 .card-text textarea {
   height: 80%;

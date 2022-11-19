@@ -2,7 +2,7 @@
   <ContentField>
     <div class="row">
       <div class="col-3">
-        <ChatList :users="users"/>
+        <ChatList :users="users" :teams="teams"/>
       </div>
       <div class="col-9" v-if="$store.state.chat.chatuserid != ''">
         <ChatProfileInfo />
@@ -57,7 +57,9 @@ export default{
           if(parseInt(store.state.chat.chatuserid) === data.receive.id){ //将别人发送的消息接收并显示出来
             store.state.chat.currentconents.push({
               content: data.receive.content.content,
-              id: data.receive.id,
+              id: data.receive.content.id,
+              user_name: data.receive.content.user_name,
+              user_photo: data.receive.content.user_photo,
               is_oneself: data.receive.content.is_oneself,
               sendtime: data.receive.content.sendtime,
               status: data.receive.content.status,
@@ -75,9 +77,13 @@ export default{
               status: data.receive.content.status,
             });
           }
+          console.log(store.state.chat.currentconents);
         } else if (data.event === "history_chat") {
           console.log("获取历史消息");
           users.value = data.history;
+          console.log(data);
+        } else if (data.event === "history_team_chat") {
+          console.log("获取team历史消息");
           teams.value = data.team_chat;
           console.log(data);
         } else {
