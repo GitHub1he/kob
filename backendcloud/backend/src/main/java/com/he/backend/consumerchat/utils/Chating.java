@@ -44,12 +44,14 @@ public class Chating{
         isSendItem.put("name", this.username);
         isSendItem.put("photo", this.photo);
         isSendItem.put("last_login_time", this.last_login_time);
-        if(isTeam(sender_id)) {
+        if(sender_id == 0) {
+            isSendItem.put("sendtime", now);
+            isSendItem.put("content", content);
+        }else if(isTeam(sender_id)) {
             isSendItem.put("content", new TeamChatContent(
                     null, false, this.username, this.photo, content, 0, now
             ));
-        }
-        else isSendItem.put("content", new ChatContent(null,false, content, 0, now));
+        }else isSendItem.put("content", new ChatContent(null,false, content, 0, now));
         return isSendItem;
     }
     private void saveToDatabase(Integer receiver_id, String content) {
@@ -61,9 +63,9 @@ public class Chating{
     public void sendChat(Integer receiver_id, String content) {
         JSONObject res = new JSONObject();
         res.put("event", "receive_chat");
-        res.put("receive", senderMessage(this.id, content));
-
         if(receiver_id == 0){ //向公屏发送 -> 所有在线的都可以收到
+            res.put("event", "search_chat");
+            res.put("screencontent", senderMessage(0, content));
             List<User> allUsers = ChatWebSocketServer.chatuserMapper.selectList(null);
             for (User user : allUsers) {
                 if(ChatWebSocketServer.users.get(user.getId()) != null) {
@@ -71,8 +73,12 @@ public class Chating{
                 }
             }
         }else if(isTeam(receiver_id)) {
+            res.put("event", "receive_chat");
+            res.put("receive", senderMessage(this.id, content));
             sendTeamChat(receiver_id, content);
         }else {
+            res.put("event", "receive_chat");
+            res.put("receive", senderMessage(this.id, content));
             if(ChatWebSocketServer.users.get(receiver_id) != null) {
                 ChatWebSocketServer.users.get(receiver_id).sendMessage(res.toString());
             }

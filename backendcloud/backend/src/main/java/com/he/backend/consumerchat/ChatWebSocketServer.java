@@ -102,6 +102,11 @@ public class ChatWebSocketServer {
             if(users.get(id) != null) {
                 users.get(id).chating.receiveTeamChat(id);
             }else System.out.println("接收者不存在");
+        } else if ("send-screen-message".equals(event)) {
+            Integer senderId = data.getInteger("sender_id");
+            Integer receiverId = data.getInteger("receiver_id");
+            String content = data.getString("content");
+            sendChat(senderId, receiverId, content);
         }
     }
 

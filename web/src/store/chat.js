@@ -8,6 +8,7 @@ export default {
     chatuserlastlogintime: "", 
     currentconents: null,
     receivecontents: [{}],
+    screencontents: [],
   },
   getters: {
   },
@@ -25,8 +26,57 @@ export default {
       state.chatuserlastlogintime = current.lastlogintime;
       state.currentconents = current.currentconents;
     },
-    updatereceiveContents(state, receivecontents) {
+    updateCurrentContents(state, currentconent) {
+      state.currentconents.push({
+        content: currentconent.content,
+        id: currentconent.id,
+        user_name: currentconent.user_name,
+        user_photo: currentconent.user_photo,
+        is_oneself: currentconent.is_oneself,
+        sendtime: currentconent.sendtime,
+        status: currentconent.status,
+      });
+    },
+    setReceiveContents(state, receivecontents) {
       state.receivecontents = receivecontents;
+    },
+    updateReceiveContents(state, receivecontent) {
+      state.receivecontents.push({
+        content: receivecontent.content.content,
+        id: receivecontent.id,
+        name: receivecontent.name,
+        photo: receivecontent.photo,
+        last_login_time: receivecontent.last_login_time,
+        is_oneself: receivecontent.content.is_oneself,
+        sendtime: receivecontent.content.sendtime,
+        status: receivecontent.content.status,
+      });
+    },
+    removeReceiveToCurrentById(state, userid) {
+      for(var receivecontent in state.receivecontents){
+        var t = state.receivecontents[receivecontent];
+        if(parseInt(t.id) === parseInt(userid)){
+          state.currentconents.push({
+            content: t.content,
+            id: state.currentconents.length,
+            is_oneself: t.is_oneself,
+            sendtime: t.sendtime,
+            status: t.status,
+          });
+        }
+      }
+      state.receivecontents.filter(function(item){
+        return item.id != userid
+      })
+    },
+    updateScreenContents(state, screencontent) {
+      state.screencontents.push({
+        id: screencontent.id,
+        name: screencontent.name,
+        photo: screencontent.photo,
+        sendtime: screencontent.sendtime,
+        content: screencontent.content,
+      });
     }
   },
   actions: {

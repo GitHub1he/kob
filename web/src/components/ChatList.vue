@@ -70,7 +70,7 @@ export default {
         lastlogintime: "",
         currentconents: null,
       });
-      store.commit("updatereceiveContents", []);
+      store.commit("setReceiveContents", []);
       store.state.chat.chatsocket.send(JSON.stringify({
         event: "receive-message",
       }));
@@ -84,7 +84,7 @@ export default {
         lastlogintime: "",
         currentconents: null,
       });
-      store.commit("updatereceiveContents", []);
+      store.commit("setReceiveContents", []);
       store.state.chat.chatsocket.send(JSON.stringify({
         event: "receive-team-message",
       }));
@@ -99,22 +99,7 @@ export default {
         currentconents: user.contents,
       });
 
-      for(var receivecontent in store.state.chat.receivecontents){
-        var t = store.state.chat.receivecontents[receivecontent];
-        if(parseInt(t.id) === parseInt(user.id)){
-          store.state.chat.currentconents.push({
-            content: t.content,
-            id: store.state.chat.currentconents.length,
-            is_oneself: t.is_oneself,
-            sendtime: t.sendtime,
-            status: t.status,
-          });
-        }
-      }
-
-      store.commit("updatereceiveContents", store.state.chat.receivecontents.filter(function(item){
-        return item.id != user.id
-      }))
+      store.commit("removeReceiveToCurrentById", user.id);
     };
     
     return {

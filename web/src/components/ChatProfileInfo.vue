@@ -8,7 +8,7 @@
         <span style="color: rgb(133, 133, 133);font-size: small;">{{ $store.state.chat.chatuserlastlogintime }}</span>
       </button>
     <div class="card-body" id="show_words" updated v-if="$store.state.chat.option === 'friends'">
-      <div   v-for="content in $store.state.chat.currentconents" :key="content.id"> <!-- :style="content.is_oneself ? 'float: right' : 'float: left'" -->
+      <div v-for="content in $store.state.chat.currentconents" :key="content.id"> <!-- :style="content.is_oneself ? 'float: right' : 'float: left'" -->
         <div class="mysend" v-if="content.is_oneself">
           <div class="info">
             <p class="time">
@@ -131,9 +131,11 @@ img {
   float: right;
   margin-right: 10px;
   position: relative;
-  margin-top: 8px;
+  margin-top: 3px;
+  margin-bottom: 10px;
   background: #A3C3F6;
   text-align: left;
+  border-radius: 5px;
 }
 /* 小三角形 */
 .mysend .info .info-content::after{
@@ -169,8 +171,10 @@ img {
   float: left;
   margin-left: 10px;
   position: relative;
-  margin-top: 8px;
+  margin-top: 3px;
+  margin-bottom: 10px;
   background: rgb(147, 211, 142);
+  border-radius: 5px;
 }
 /* 小三角形 */
 .myreceive .info .info-content::before{
