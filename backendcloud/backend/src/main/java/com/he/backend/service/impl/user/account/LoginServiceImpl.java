@@ -1,5 +1,6 @@
 package com.he.backend.service.impl.user.account;
 
+import com.he.backend.mapper.UserMapper;
 import com.he.backend.pojo.User;
 import com.he.backend.service.impl.utils.UserDetailsImpl;
 import com.he.backend.service.user.account.LoginService;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +20,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
+    @Autowired
+    private UserMapper userMapper;
     @Override
     public Map<String, String> gettoken(String username, String password) {
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -34,7 +37,8 @@ public class LoginServiceImpl implements LoginService {
         Map<String,String> map = new HashMap<>();
         map.put("error_message" , "success");
         map.put("token" , jwt);
-
+        user.setLastLoginTime(new Date());
+        userMapper.updateById(user);
         return map;
     }
 }

@@ -66,11 +66,8 @@ public class Chating{
         if(receiver_id == 0){ //向公屏发送 -> 所有在线的都可以收到
             res.put("event", "search_chat");
             res.put("screencontent", senderMessage(0, content));
-            List<User> allUsers = ChatWebSocketServer.chatuserMapper.selectList(null);
-            for (User user : allUsers) {
-                if(ChatWebSocketServer.users.get(user.getId()) != null) {
-                    ChatWebSocketServer.users.get(user.getId()).sendMessage(res.toString());
-                }
+            for (ChatWebSocketServer cws : ChatWebSocketServer.users.values()) {
+                cws.sendMessage(res.toString());
             }
         }else if(isTeam(receiver_id)) {
             res.put("event", "receive_chat");

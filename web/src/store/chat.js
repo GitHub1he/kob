@@ -9,6 +9,7 @@ export default {
     currentconents: null,
     receivecontents: [{}],
     screencontents: [],
+    searchoption: "people", // people , team
   },
   getters: {
   },
@@ -77,6 +78,9 @@ export default {
         sendtime: screencontent.sendtime,
         content: screencontent.content,
       });
+    },
+    updateSearchOption(state, searchoption) {
+      state.searchoption = searchoption;
     }
   },
   actions: {

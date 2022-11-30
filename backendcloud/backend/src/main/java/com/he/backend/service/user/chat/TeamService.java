@@ -9,4 +9,5 @@ public interface TeamService {
     Map<String, String> teamDel(Integer id);
     Map<String, String> teamUpd(Integer id, String name, Integer ownerId);
     JSONObject getTeam(Integer page);
+    JSONObject searchTeam(String name);
 }

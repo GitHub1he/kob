@@ -59,26 +59,17 @@ export default{
       socket.onmessage = msg => {
         const data = JSON.parse(msg.data);
         if(data.event === "receive_chat") { //接收消息
-          console.log("接收信息");
-          console.log(data);
           if(parseInt(store.state.chat.chatuserid) === data.receive.id){ //将别人发送的消息接收并显示出来
             store.commit("updateCurrentContents", data.receive.content);
           }else {
             // 找到与当前用户对话的位置，将消息追加到contents中，
             store.commit("updateReceiveContents", data.receive);
           }
-          console.log(store.state.chat.currentconents);
         } else if (data.event === "history_chat") {
-          console.log("获取历史消息");
           users.value = data.history;
-          console.log(data);
         } else if (data.event === "history_team_chat") {
-          console.log("获取team历史消息");
           teams.value = data.team_chat;
-          console.log(data);
         } else if (data.event === "search_chat") {
-          console.log("获取公屏信息");
-          console.log(data.screencontent);
           store.commit("updateScreenContents", data.screencontent);
         } else {
           console.log("其他消息");
@@ -120,5 +111,13 @@ export default{
   border: 1px solid white;
   border-radius: 5% 5% 0 0;
   overflow: hidden;
+}
+.chatsearch {
+  width: 24%;
+  height: 36%;
+  /* background-color: rgba(50%, 50%, 50%, .4); */
+  position: fixed;
+  bottom: 1vh;
+  right: 1vw;
 }
 </style>

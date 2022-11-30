@@ -106,4 +106,23 @@ public class TeamServiceImpl implements TeamService {
         res.put("teams_count", teams_count);
         return res;
     }
+
+    @Override
+    public JSONObject searchTeam(String name) {
+        JSONObject res = new JSONObject();
+        if ("".equals(name)) {
+            res.put("error_message", "请输入要查找的群名！");
+            return res;
+        }
+        QueryWrapper<Teams> qwteams = new QueryWrapper<>();
+        qwteams.like("name", name);
+        List<Teams> teams = teamMapper.selectList(qwteams);
+        if(teams.size() == 0) {
+            res.put("error_message", "该群不存在");
+            return res;
+        }
+        res.put("search_res", teams);
+        res.put("error_message", "success");
+        return res;
+    }
 }

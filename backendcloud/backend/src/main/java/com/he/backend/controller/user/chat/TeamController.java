@@ -21,6 +21,12 @@ public class TeamController {
         return teamService.teamCreate(name);
     }
 
+    @GetMapping("/api/team/search/")
+    public JSONObject teamSearch(@RequestParam Map<String, String> data) {
+        String name = data.get("name");
+        return teamService.searchTeam(name);
+    }
+
     @PostMapping("/api/team/del/")
     public Map<String, String> teamDel(@RequestParam Map<String, String> data) {
         Integer id = Integer.parseInt(data.get("id"));

@@ -4,7 +4,7 @@
     <div class="card-body" id="show_words">
       <div class="screen_chatlist" v-for="content in $store.state.chat.screencontents" :key="content.id">
         <div class="screen_chat">
-          <img :src="content.photo" alt="头像">
+          <img :src="content.photo" :class="$store.state.user.username === content.name ? 'myself' : 'no-myself' " alt="头像">
           <div class="info">
             <p class="time">
               {{ content.name }}
@@ -133,6 +133,9 @@ img {
   height: 5vh;
   border-radius: 50%;
 } 
+.myself {
+  border: 1px solid red;
+}
 .screen_chat {
   display: flex;
 }
