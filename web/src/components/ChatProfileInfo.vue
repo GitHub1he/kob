@@ -1,7 +1,15 @@
 <template>
   <div class="card card-profile">
-      <button @click="$store.state.chat.option === 'friends' ? 'open_user_profile($store.state.chat.chatuserid)' : '#'" type="button" class="btn btn-user-space btn-outline-info">
+      <button @click="open_user_profile($store.state.chat.chatuserid)" type="button" class="btn btn-user-space btn-outline-info" v-if="$store.state.chat.option === 'friends'">
         <img class="img-fluid" :src="$store.state.chat.chatuserphoto" alt="对面头像">
+        &nbsp;
+        <span style="font-weight: bold;font-size: large;">{{ $store.state.chat.chatusername }}</span>
+        &nbsp;
+        <span style="color: rgb(133, 133, 133);font-size: small;">{{ $store.state.chat.chatuserlastlogintime }}</span>
+      </button>
+      <button @click="open_team_profile" type="button" class="btn btn-user-space btn-outline-info" v-if="$store.state.chat.option === 'teams'">
+        <img class="img-fluid" :src="$store.state.chat.chatuserphoto" alt="对面头像">
+        {{ $store.state.chat.chatuserid }}
         &nbsp;
         <span style="font-weight: bold;font-size: large;">{{ $store.state.chat.chatusername }}</span>
         &nbsp;
@@ -28,12 +36,12 @@
             </p>
             <div class="info-content">{{ content.content }}</div>
           </div>
-          
         </div>
       </div>
     </div>
     <div class="card-body" id="show_words" updated v-if="$store.state.chat.option === 'teams'">
-      <div  v-for="content in $store.state.chat.currentconents" :key="content.id">
+      <ChatTeamInfo/>
+      <div v-for="content in $store.state.chat.currentconents" :key="content.id">
         <div class="mysend" v-if="content.is_oneself">
           <div class="info">
             <p class="time">
@@ -59,12 +67,16 @@
 </template>
 
 <script>
-
+import ChatTeamInfo from '@/components/ChatTeamInfo.vue';
 import router from '@/router';
 import { useStore } from 'vuex';
+import { ref } from 'vue';
 
 export default {
   name: "ChatProfileInfo",
+  components: {
+    ChatTeamInfo,
+  },
   updated : function(){
     this.$nextTick(function(){
       var div = document.getElementById('show_words');
@@ -72,8 +84,9 @@ export default {
     })
   },
   setup() {
-
+    const teaminfo = ref();
     const store = useStore();
+
     const open_user_profile = userId => {
       store.commit("updateFlag",0);
       router.push({
@@ -81,13 +94,21 @@ export default {
         params: { userId }
       });
     };
-
+    
+    const open_team_profile = () => {
+      console.log("显示team人员");
+      
+      if(store.state.chat.isteaminfo) store.commit("updateIsTeamInfo", false);
+      else store.commit("updateIsTeamInfo", true);
+    }
 
     return {
+      teaminfo,
       open_user_profile,
+      open_team_profile,
     }
   }
-}
+};
 </script>
 
 <style scoped>

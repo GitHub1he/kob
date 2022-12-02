@@ -66,19 +66,23 @@ public class TeamDetailServiceImpl implements TeamDetailService {
     @Override
     public JSONObject getGroupUsers(Integer teamId, Integer page) {
         JSONObject res = new JSONObject();
-        IPage<TeamsDetail> teamsDetailIPage = new Page<>(page, 10);
+        IPage<TeamsDetail> teamsDetailIPage = new Page<>(page, 6);
 
         QueryWrapper<TeamsDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("team_id", teamId);
         List<TeamsDetail> details = teamDetailMapper.selectPage(teamsDetailIPage,queryWrapper).getRecords();
 
-        List<User> users = new LinkedList<>();
+        List<JSONObject> users = new LinkedList<>();
+
         for (TeamsDetail detail : details) {
             Integer userId = detail.getUserId();
             User person = userMapper.selectById(userId);
-            if(person != null) {
-                person.setPassword("");
-                users.add(person);
+            if(person != null){
+                JSONObject item = new JSONObject();
+                item.put("id", userId);
+                item.put("name", person.getUsername());
+                item.put("photo", person.getPhoto());
+                users.add(item);
             }
         }
 

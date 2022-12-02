@@ -1,7 +1,7 @@
 export default {
   state: {
     chatsocket: null, 
-    option: "friends", // friends/team
+    option: "friends", // friends/teams
     chatuserid: "",
     chatusername: "",
     chatuserphoto: "",
@@ -10,6 +10,9 @@ export default {
     receivecontents: [{}],
     screencontents: [],
     searchoption: "people", // people , team
+    isscreen: false,
+    issearch: false,
+    isteaminfo: false,
   },
   getters: {
   },
@@ -81,6 +84,15 @@ export default {
     },
     updateSearchOption(state, searchoption) {
       state.searchoption = searchoption;
+    },
+    updateIsSearch(state, issearch) {
+      state.issearch = issearch;
+    },
+    updateIsScreen(state, isscreen) {
+      state.isscreen = isscreen;
+    },
+    updateIsTeamInfo(state, isteaminfo) {
+      state.isteaminfo = isteaminfo;
     }
   },
   actions: {

@@ -8,7 +8,7 @@
         <li class="nav-item">
           <button @click="search_op_team" type="button" :class="$store.state.chat.searchoption === 'team' ? 'nav-link active' :'nav-link'">群</button>
         </li>
-        
+        <button @click="close_search" type="button" class="btn-close" aria-label="Close"></button>
       </ul>
     </div>
     <div class="card-body">
@@ -90,6 +90,10 @@ export default {
     const search_op_team = () => {
       clear_input();
       store.commit("updateSearchOption", 'team');
+    }
+    const close_search = () => {
+      clear_input();
+      store.commit("updateIsSearch", false);
     }
 
     const search_people = () => {
@@ -192,6 +196,7 @@ export default {
       error_message,
       open_user_profile,
       join_team,
+      close_search,
     }
   }
 }
@@ -199,6 +204,12 @@ export default {
 <style>
 .card-header {
   height: 15%;
+  position: relative;
+  user-select: none;
+}
+.btn-close {
+  position: absolute;
+  right: 1vw;
 }
 .card-body {
   height: 85%;

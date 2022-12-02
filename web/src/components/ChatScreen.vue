@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" v-if="$store.state.chat.isscreen">
     <div class="screen_nav">公 屏</div>
     <div class="card-body" id="show_words">
       <div class="screen_chatlist" v-for="content in $store.state.chat.screencontents" :key="content.id">

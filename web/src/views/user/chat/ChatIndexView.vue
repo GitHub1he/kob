@@ -14,16 +14,24 @@
       </div>
     </div>
   </div>
+  <button @click="open_screen" class="btn btn-info screenbtn" type="button">
+    公屏
+  </button>
   <ChatScreen class="chatscreen"/>
-  <ChatSearch class="chatsearch"/>
+  <button @click="open_search" class="btn btn-info searchbtn" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+    </svg>
+  </button>
+  <ChatSearch class="chatsearch" v-if="$store.state.chat.issearch"/>
 </template>
 
 <script>
 import ChatList from '@/components/ChatList.vue';
 import ChatProfileInfo from '@/components/ChatProfileInfo.vue';
 import ChatProfileWrite from "@/components/ChatProfileWrite.vue";
-import ChatScreen from "@/components/ChatScreen.vue"
-import ChatSearch from "@/components/ChatSearch.vue"
+import ChatScreen from "@/components/ChatScreen.vue";
+import ChatSearch from "@/components/ChatSearch.vue";
 import { onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import { reactive } from 'vue';
@@ -35,8 +43,8 @@ export default{
     ChatProfileInfo,
     ChatProfileWrite,
     ChatScreen,
-    ChatSearch
-},
+    ChatSearch,
+  },
   setup() {
     const store = useStore();
     const socketUrl = `ws://127.0.0.1:3000/websocket/chat/${store.state.user.token}/`;
@@ -87,9 +95,25 @@ export default{
       socket.close();
     });
 
+    const open_search = () => {
+      if(store.state.chat.issearch) {
+        store.commit("updateIsSearch", false);
+      } else {
+        store.commit("updateIsSearch", true);
+      }
+    };
+    const open_screen = () => {
+      if(store.state.chat.isscreen) {
+        store.commit("updateIsScreen", false);
+      } else {
+        store.commit("updateIsScreen", true);
+      }
+    }
     return {
       users,
       teams,
+      open_search,
+      open_screen,
     }
   }
 }
@@ -111,6 +135,16 @@ export default{
   border: 1px solid white;
   border-radius: 5% 5% 0 0;
   overflow: hidden;
+}
+.searchbtn {
+  position: fixed;
+  bottom: 1vh;
+  right: 1vw;
+}
+.screenbtn {
+  position: fixed;
+  top: 8vh;
+  right: 1vw;
 }
 .chatsearch {
   width: 24%;
