@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import PostsListView from '@/views/home/PostsListView'
 import PKIndexView from '@/views/pk/PKIndexView'
 import RecordIndexView from '@/views/record/RecordIndexView'
 import RecordContentView from '@/views/record/RecordContentView'
@@ -15,7 +16,8 @@ const routes = [
   {
     path: "/",
     name: "home",
-    redirect: "/userbot/",
+    component: PostsListView,
+    // redirect: "/userbot/",
     meta: {
       requestAuth: true,
     }
